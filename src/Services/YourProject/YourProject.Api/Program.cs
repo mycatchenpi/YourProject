@@ -15,6 +15,10 @@ using YourProject.Infrastructure.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// 1. Add reverse proxy service
+builder.Services.AddReverseProxy()
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+
 // Register services using Dependency Injection
 builder.Services.AddScoped<IAuthenticator, Authenticator>();
 builder.Services.AddScoped<AuthService>();
@@ -26,6 +30,7 @@ app.UseRouting();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
+    endpoints.MapReverseProxy();  // This Enabel YARP
 });
 
 app.Run();
